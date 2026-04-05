@@ -923,13 +923,14 @@
         // ORBIT VISUALIZATION
         // ==========================================
         class OrbitVisualization {
-            constructor(canvas) {
+            constructor(canvas, launchTime) {
                 this.canvas = canvas;
                 this.ctx = canvas.getContext('2d');
                 this.trail = [];
                 this.maxTrail = 100;
                 this.moonAngle = 0;
                 this.orionPos = null;
+                this.launchTime = launchTime;
                 this.resize();
                 window.addEventListener('resize', () => this.resize());
 
@@ -1394,7 +1395,7 @@
         // ==========================================
         class ArtemisTracker {
             constructor() {
-                this.orbitViz = new OrbitVisualization(document.getElementById('orbit-canvas'));
+                this.orbitViz = new OrbitVisualization(document.getElementById('orbit-canvas'), this.launchTime);
                 this.calculator = new MissionCalculator();
                 this.horizons = new HorizonsAPI();
                 this.updateInterval = 60000; // 60 seconds
