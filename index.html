@@ -968,8 +968,24 @@
                 this.draw();
             }
 
+            draw() {
+                if (!this.orionPos || typeof this.orionPos.x !== 'number') {
+                    return; // Wait for valid position data
+                }
+                if (!this.canvas || this.canvas.width === 0 || this.canvas.height === 0) {
+                    return; // Skip if canvas not ready
+                }
+                const ctx = this.ctx;
+                ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-                // Draw trail
+                // Draw orbit path (dashed circle for Moon orbit)
+                ctx.beginPath();
+                ctx.arc(this.centerX, this.centerY, EARTH_MOON_DISTANCE * this.scale, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
+                ctx.setLineDash([5, 5]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
                 if (this.trail.length > 1) {
                     ctx.beginPath();
                     ctx.moveTo(
