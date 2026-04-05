@@ -158,6 +158,8 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
+            transform: translateZ(0);
+            will-change: contents;
         }
 
         .canvas-title {
@@ -923,6 +925,8 @@
 
             resize() {
                 const rect = this.canvas.parentElement.getBoundingClientRect();
+                // Guard against resize during scroll on mobile - skip if element is off-screen or has 0 width
+                if (!rect || rect.width === 0) return;
                 this.canvas.width = Math.max(100, rect.width - 40);
                 this.canvas.height = 500;
                 this.centerX = this.canvas.width / 2;
