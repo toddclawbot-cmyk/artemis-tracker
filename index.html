@@ -158,8 +158,12 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
-            transform: translateZ(0);
-            will-change: contents;
+        }
+
+        #orbit-canvas {
+            display: block;
+            width: 100%;
+            height: 500px;
         }
 
         .canvas-title {
@@ -1286,6 +1290,20 @@
                 initStars();
                 this.update();
                 setInterval(() => this.update(), this.updateInterval);
+
+                // Force canvas redraw when scrolled back into view on iOS Safari
+                const canvasContainer = document.querySelector('.canvas-container');
+                if (canvasContainer && 'IntersectionObserver' in window) {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting && this.orbitViz) {
+                                // Canvas came back into view - force a redraw
+                                this.orbitViz.draw();
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    observer.observe(canvasContainer);
+                }
             }
 
             async update() {
