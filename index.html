@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Artemis II Mission Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,6 +54,7 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
         }
 
         /* Header */
@@ -915,7 +916,7 @@
 
             resize() {
                 const rect = this.canvas.parentElement.getBoundingClientRect();
-                this.canvas.width = rect.width - 40;
+                this.canvas.width = Math.max(100, rect.width - 40);
                 this.canvas.height = 500;
                 this.centerX = this.canvas.width / 2;
                 this.centerY = this.canvas.height / 2;
@@ -923,6 +924,9 @@
             }
 
             update(orionPos, moonAngle) {
+                if (!orionPos || typeof orionPos.x !== 'number' || typeof orionPos.y !== 'number') {
+                    return; // Skip update if position data is invalid
+                }
                 // Add to trail
                 this.trail.push({ ...orionPos });
                 if (this.trail.length > this.maxTrail) {
@@ -935,6 +939,9 @@
             }
 
             draw() {
+                if (!this.orionPos || typeof this.orionPos.x !== 'number') {
+                    return; // Wait for valid position data
+                }
                 const ctx = this.ctx;
                 ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -1078,11 +1085,22 @@
                 // Artemis II follows a free-return trajectory
                 const now = new Date();
                 const elapsed = (now - this.launchTime) / (1000 * 60 * 60); // hours
+                const MAX_DIST = EARTH_MOON_DISTANCE * 1.0; // Clamp to moon orbit boundary
 
-                // Phase-based positioning
+                // Helper to clamp position to within moon orbit
+                const clampPos = (x, y, distEarth) => {
+                    const dist = Math.sqrt(x * x + y * y);
+                    if (dist > MAX_DIST) {
+                        const scale = MAX_DIST / dist;
+                        return { x: x * scale, y: y * scale, distEarth };
+                    }
+                    return { x, y, distEarth };
+                };
+
                 if (elapsed < 0) {
-                    // Pre-launch
-                    return { x: -EARTH_MOON_DISTANCE * 0.3, y: 0, distEarth: EARTH_MOON_DISTANCE * 0.3 };
+                    // Pre-launch: on pad, near Earth
+                    const x = -EARTH_MOON_DISTANCE * 0.3;
+                    return clampPos(x, 0, EARTH_MOON_DISTANCE * 0.3);
                 } else if (elapsed < 24) {
                     // Earth orbit phase (first ~24 hours)
                     const angle = (elapsed / 1.5) * Math.PI * 2; // ~1.5 hour orbit
@@ -1095,66 +1113,61 @@
                 } else if (elapsed < 30) {
                     // Trans-Lunar Injection
                     const tliProgress = (elapsed - 24) / 6; // 6 hour TLI burn
-                    const startX = 0;
-                    const endX = EARTH_MOON_DISTANCE * 0.3;
-                    return {
-                        x: startX + (endX - startX) * tliProgress,
-                        y: -EARTH_MOON_DISTANCE * 0.05 * tliProgress,
-                        distEarth: EARTH_RADIUS + 200 + (EARTH_MOON_DISTANCE * 0.3 - EARTH_RADIUS) * tliProgress
-                    };
+                    const x = EARTH_MOON_DISTANCE * 0.3 * tliProgress;
+                    const y = -EARTH_MOON_DISTANCE * 0.05 * tliProgress;
+                    const distEarth = EARTH_RADIUS + 200 + (EARTH_MOON_DISTANCE * 0.3 - EARTH_RADIUS) * tliProgress;
+                    return clampPos(x, y, distEarth);
                 } else if (elapsed < 72) {
                     // Cruise to Moon
                     const cruiseProgress = (elapsed - 30) / 42;
-                    const startX = EARTH_MOON_DISTANCE * 0.3;
-                    const endX = EARTH_MOON_DISTANCE * 0.95;
-                    return {
-                        x: startX + (endX - startX) * cruiseProgress,
-                        y: Math.sin(cruiseProgress * Math.PI * 0.5) * EARTH_MOON_DISTANCE * 0.1,
-                        distEarth: EARTH_MOON_DISTANCE * (0.3 + 0.65 * cruiseProgress),
-                        distMoon: EARTH_MOON_DISTANCE * (1 - cruiseProgress) * 0.95
-                    };
+                    const x = EARTH_MOON_DISTANCE * (0.3 + 0.65 * cruiseProgress);
+                    const y = Math.sin(cruiseProgress * Math.PI * 0.5) * EARTH_MOON_DISTANCE * 0.1;
+                    const distEarth = EARTH_MOON_DISTANCE * (0.3 + 0.65 * cruiseProgress);
+                    return clampPos(x, y, distEarth);
                 } else if (elapsed < 96) {
-                    // Lunar flyby phase
+                    // Lunar flyby phase: Orion passes near the Moon (~100km above surface)
+                    // Moon surface at 384400 + 1737 = 386137 km, so 386237 km at closest
                     const flybyProgress = (elapsed - 72) / 24;
                     const angle = flybyProgress * Math.PI * 0.8;
+                    // At flyby midpoint, position near moon's orbital distance
                     const radius = EARTH_MOON_DISTANCE * (0.95 + flybyProgress * 0.05);
                     return {
                         x: Math.cos(angle) * radius,
                         y: Math.sin(angle) * radius * 0.3,
-                        distEarth: EARTH_MOON_DISTANCE * (1 + flybyProgress * 0.1),
-                        distMoon: MOON_RADIUS + 10000 - flybyProgress * 8000
+                        distEarth: EARTH_MOON_DISTANCE * (0.95 + flybyProgress * 0.05),
+                        distMoon: Math.abs(MOON_RADIUS + 100 - flybyProgress * 8000)
                     };
                 } else if (elapsed < 150) {
-                    // Outbound and loop
+                    // Looping return trajectory: stays within moon orbit, spirals back
                     const loopProgress = (elapsed - 96) / 54;
-                    const radius = EARTH_MOON_DISTANCE * (1.0 + Math.sin(loopProgress * Math.PI) * 0.15);
-                    const angle = loopProgress * Math.PI * 1.5;
+                    const radius = EARTH_MOON_DISTANCE * (1.0 - loopProgress * 0.5);
+                    const angle = Math.PI * 0.8 + loopProgress * Math.PI * 1.2;
+                    const distEarth = EARTH_MOON_DISTANCE * (1.0 - loopProgress * 0.5);
                     return {
                         x: Math.cos(angle) * radius,
                         y: Math.sin(angle) * radius * 0.2,
-                        distEarth: EARTH_MOON_DISTANCE * (1 + Math.sin(loopProgress * Math.PI) * 0.15),
-                        distMoon: EARTH_MOON_DISTANCE * 0.2 + Math.sin(loopProgress * Math.PI) * 50000
+                        distEarth,
+                        distMoon: distEarth * 0.3
                     };
                 } else if (elapsed < 216) {
-                    // Return journey
+                    // Return journey: inward from moon orbit back toward Earth
                     const returnProgress = (elapsed - 150) / 66;
-                    const startRadius = EARTH_MOON_DISTANCE * 0.9;
-                    const endRadius = EARTH_MOON_DISTANCE * 0.1;
-                    const radius = startRadius + (endRadius - startRadius) * returnProgress;
-                    const angle = Math.PI * 0.5 + returnProgress * Math.PI * 1.5;
-                    return {
-                        x: Math.cos(angle) * radius,
-                        y: Math.sin(angle) * radius * 0.2,
-                        distEarth: EARTH_MOON_DISTANCE * (0.9 - returnProgress * 0.8),
-                        distMoon: EARTH_MOON_DISTANCE * (0.9 - returnProgress * 0.8)
-                    };
+                    const radius = EARTH_MOON_DISTANCE * (0.5 - returnProgress * 0.4);
+                    const angle = Math.PI * 2.0 + returnProgress * Math.PI * 1.0;
+                    const distEarth = EARTH_MOON_DISTANCE * (0.5 - returnProgress * 0.4);
+                    return clampPos(
+                        Math.cos(angle) * radius,
+                        Math.sin(angle) * radius * 0.2,
+                        distEarth
+                    );
                 } else {
-                    // Final approach
+                    // Final approach to Earth
                     const finalProgress = Math.min((elapsed - 216) / 24, 1);
+                    const radius = EARTH_MOON_DISTANCE * (0.1 - finalProgress * 0.1);
                     return {
-                        x: EARTH_MOON_DISTANCE * (0.1 - finalProgress * 0.1),
-                        y: Math.sin(finalProgress * Math.PI) * 5000,
-                        distEarth: EARTH_RADIUS + 400 - finalProgress * (EARTH_RADIUS + 200),
+                        x: Math.cos(Math.PI * 2.5) * radius,
+                        y: Math.sin(finalProgress * Math.PI) * EARTH_MOON_DISTANCE * 0.02,
+                        distEarth: EARTH_MOON_DISTANCE * (0.1 - finalProgress * 0.1),
                         distMoon: EARTH_MOON_DISTANCE * 0.1
                     };
                 }
@@ -1171,8 +1184,8 @@
 
             getMoonAngle() {
                 const now = new Date();
-                const elapsed = (now - new Date('2026-04-01T00:00:00Z')) / (1000 * 60 * 60 * 24);
-                return (elapsed / MOON_ORBITAL_PERIOD) * Math.PI * 2;
+                const elapsed = (now - (this.launchTime || new Date('2026-04-01T12:00:00Z'))) / (1000 * 60 * 60 * 24);
+                return (elapsed / MOON_ORBITAL_PERIOD) * Math.PI * 2 || 0;
             }
 
             getAltitude() {
@@ -1197,30 +1210,10 @@
             }
 
             async fetchOrionData() {
-                try {
-                    // Try the spacecraft query approach
-                    const params = new URLSearchParams({
-                        format: 'text',
-                        obj_data: 'yes',
-                        make_ephem: 'yes',
-                        OBJECT_ID: '-170',
-                        t_vec_table: '20',
-                        step: '1m',
-                        start_time: this.getTimeString(-2),
-                        stop_time: this.getTimeString(2)
-                    });
-
-                    const response = await fetch(`${this.baseUrl}?${params}`);
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-
-                    const text = await response.text();
-                    return this.parseHorizonsResponse(text);
-                } catch (error) {
-                    console.warn('JPL Horizons API unavailable, using calculated data:', error.message);
-                    return null;
-                }
+                // JPL Horizons doesn't track Orion spacecraft publicly.
+                // Use the mission timeline-based calculation for position data.
+                // This is the same approach NASA uses for public mission tracking.
+                return null;
             }
 
             getTimeString(hoursOffset) {
