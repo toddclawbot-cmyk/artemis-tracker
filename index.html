@@ -1395,6 +1395,7 @@
         // ==========================================
         class ArtemisTracker {
             constructor() {
+                this.launchTime = MISSION_LAUNCH;
                 this.orbitViz = new OrbitVisualization(document.getElementById('orbit-canvas'), this.launchTime);
                 this.calculator = new MissionCalculator();
                 this.horizons = new HorizonsAPI();
