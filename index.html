@@ -688,15 +688,15 @@
                     <div class="data-grid">
                         <div class="data-item">
                             <div class="data-value" id="dist-earth">---</div>
-                            <div class="data-label">km from Earth</div>
+                            <div class="data-label">mi from Earth</div>
                         </div>
                         <div class="data-item">
                             <div class="data-value gold" id="dist-moon">---</div>
-                            <div class="data-label">km from Moon</div>
+                            <div class="data-label">mi from Moon</div>
                         </div>
                         <div class="data-item">
                             <div class="data-value" id="velocity">---</div>
-                            <div class="data-label">km/s velocity</div>
+                            <div class="data-label">mi/s velocity</div>
                         </div>
                         <div class="data-item">
                             <div class="data-value gold" id="mission-time">---</div>
@@ -727,7 +727,7 @@
                     <div class="data-grid">
                         <div class="data-item">
                             <div class="data-value" id="altitude">---</div>
-                            <div class="data-label">Altitude km</div>
+                            <div class="data-label">Altitude mi</div>
                         </div>
                         <div class="data-item">
                             <div class="data-value" id="inclination">---</div>
@@ -823,7 +823,7 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">2.1M</div>
-                    <div class="stat-label">km Total Distance</div>
+                    <div class="stat-label">mi Total Distance</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">7</div>
@@ -860,6 +860,7 @@
         const MOON_RADIUS = 1737; // km
         const EARTH_MOON_DISTANCE = 384400; // km
         const MOON_ORBITAL_PERIOD = 27.3; // days
+        const KM_TO_MI = 0.621371; // km to miles
 
         // Mission timeline events
         const MISSION_EVENTS = [
@@ -1442,9 +1443,9 @@
             }
 
             formatNumber(num) {
-                if (num >= 1000000) {
-                    return (num / 1000000).toFixed(2) + 'M';
-                } else if (num >= 1000) {
+                // Convert km to miles for display
+                num = num * KM_TO_MI;
+                if (num >= 1000) {
                     return (num / 1000).toFixed(0) + 'K';
                 }
                 return Math.round(num).toString();
