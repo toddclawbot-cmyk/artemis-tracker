@@ -923,8 +923,17 @@
                 this.ctx = canvas.getContext('2d');
                 this.trail = [];
                 this.maxTrail = 100;
+                this.moonAngle = 0;
+                this.orionPos = null;
                 this.resize();
                 window.addEventListener('resize', () => this.resize());
+
+                // Continuous RAF loop for smooth 60fps rendering
+                const drawLoop = () => {
+                    this.draw();
+                    requestAnimationFrame(drawLoop);
+                };
+                requestAnimationFrame(drawLoop);
             }
 
             resize() {
@@ -956,6 +965,9 @@
             draw() {
                 if (!this.orionPos || typeof this.orionPos.x !== 'number') {
                     return; // Wait for valid position data
+                }
+                if (!this.canvas || this.canvas.width === 0 || this.canvas.height === 0) {
+                    return; // Skip if canvas not ready
                 }
                 const ctx = this.ctx;
                 ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
