@@ -702,6 +702,10 @@
                             <div class="data-value gold" id="mission-time">---</div>
                             <div class="data-label">Mission Time</div>
                         </div>
+                        <div class="data-item">
+                            <div class="data-value" id="time-to-return">---</div>
+                            <div class="data-label">To Earth Return</div>
+                        </div>
                     </div>
                 </div>
 
@@ -1210,6 +1214,16 @@
                 return 11.2 - (elapsed - 150) * 0.02; // Return (approaching Earth)
             }
 
+            getTimeToReturn() {
+                const now = new Date();
+                const returnDate = new Date('2026-04-10T16:00:00Z');
+                const remaining = returnDate - now;
+                if (remaining <= 0) return { hours: 0, minutes: 0, text: 'Landed' };
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                return { hours, minutes, text: `${hours}h ${minutes}m` };
+            }
+
             getMoonAngle() {
                 const now = new Date();
                 const elapsed = (now - (this.launchTime || new Date('2026-04-01T12:00:00Z'))) / (1000 * 60 * 60 * 24);
@@ -1391,6 +1405,8 @@
                     document.getElementById('mission-time').textContent =
                         `${time.days}d ${time.hours}h ${time.minutes}m`;
                 }
+                const timeToReturn = this.calculator.getTimeToReturn();
+                document.getElementById('time-to-return').textContent = timeToReturn.text;
             }
 
             updatePhase() {
