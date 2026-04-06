@@ -175,12 +175,6 @@
             text-transform: uppercase;
         }
 
-        #orbit-canvas {
-            width: 100%;
-            height: 500px;
-            border-radius: 10px;
-        }
-
         .canvas-legend {
             display: flex;
             justify-content: center;
@@ -371,7 +365,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 120px;
+            width: 100px;
         }
 
         .timeline-dot {
@@ -405,7 +399,7 @@
 
         .timeline-date {
             font-family: 'Orbitron', monospace;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             margin-bottom: 5px;
         }
@@ -416,9 +410,10 @@
         }
 
         .timeline-label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             text-align: center;
+            line-height: 1.3;
         }
 
         .timeline-item.completed .timeline-label {
@@ -527,6 +522,19 @@
             letter-spacing: 1px;
         }
 
+        .stat-item .stat-value.small {
+            font-size: 24px;
+        }
+
+        .stat-item .stat-value .record-badge {
+            font-size: 11px;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: var(--gold);
+            margin-left: 5px;
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -632,7 +640,7 @@
                 &nbsp;NASA Artemis II Mission
             </div>
             <h1>ARTEMIS II</h1>
-            <p class="subtitle">Orion Spacecraft Tracker</p>
+            <p class="subtitle">Orion Spacecraft Tracker — Free-Return Figure-Eight Trajectory</p>
         </header>
 
         <!-- Status Bar -->
@@ -642,8 +650,8 @@
                 <span>Tracking Active</span>
             </div>
             <div class="status-item">
-                <span class="status-dot"></span>
-                <span>JPL Horizons Connected</span>
+                <span class="status-dot active"></span>
+                <span>Mission Data</span>
             </div>
             <div class="status-item">
                 <span class="status-dot"></span>
@@ -655,7 +663,7 @@
         <div class="main-grid">
             <!-- Left: Orbit Visualization -->
             <div class="canvas-container">
-                <div class="canvas-title">Earth-Moon System • Orbital View</div>
+                <div class="canvas-title">Earth-Moon System • Free-Return Trajectory</div>
                 <canvas id="orbit-canvas"></canvas>
                 <div class="canvas-legend">
                     <div class="legend-item">
@@ -704,7 +712,7 @@
                         </div>
                         <div class="data-item">
                             <div class="data-value" id="time-to-return">---</div>
-                            <div class="data-label">To Earth Return</div>
+                            <div class="data-label">To Splashdown</div>
                         </div>
                     </div>
                 </div>
@@ -725,7 +733,7 @@
                 <!-- Orbit Parameters -->
                 <div class="data-card">
                     <div class="card-header">
-                        <span class="card-title">Orbital Parameters</span>
+                        <span class="card-title">Flight Parameters</span>
                         <span class="card-icon">🛸</span>
                     </div>
                     <div class="data-grid">
@@ -744,35 +752,60 @@
 
         <!-- Timeline Section -->
         <section class="timeline-section">
-            <h2 class="section-title">Mission Timeline</h2>
+            <h2 class="section-title">Mission Timeline — Flight Days</h2>
             <div class="timeline">
                 <div class="timeline-track"></div>
                 <div class="timeline-progress" id="timeline-progress"></div>
                 <div class="timeline-items">
-                    <div class="timeline-item completed" id="tl-launch">
+                    <div class="timeline-item" id="tl-1">
                         <div class="timeline-dot"></div>
                         <div class="timeline-date">APR 1</div>
-                        <div class="timeline-label">Launch</div>
+                        <div class="timeline-label">High Earth Orbit</div>
                     </div>
-                    <div class="timeline-item current" id="tl-tli">
+                    <div class="timeline-item" id="tl-2">
                         <div class="timeline-dot"></div>
                         <div class="timeline-date">APR 2</div>
                         <div class="timeline-label">Trans-Lunar Injection</div>
                     </div>
-                    <div class="timeline-item upcoming" id="tl-flyby">
+                    <div class="timeline-item" id="tl-3">
                         <div class="timeline-dot"></div>
                         <div class="timeline-date">APR 3</div>
-                        <div class="timeline-label">Lunar Flyby</div>
+                        <div class="timeline-label">Outbound Transit</div>
                     </div>
-                    <div class="timeline-item upcoming" id="tl-outbound">
+                    <div class="timeline-item" id="tl-4">
                         <div class="timeline-dot"></div>
                         <div class="timeline-date">APR 4</div>
-                        <div class="timeline-label">Outbound Loop</div>
+                        <div class="timeline-label">Outbound Transit</div>
                     </div>
-                    <div class="timeline-item upcoming" id="tl-return">
+                    <div class="timeline-item" id="tl-5">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">APR 5</div>
+                        <div class="timeline-label">Lunar SOI</div>
+                    </div>
+                    <div class="timeline-item" id="tl-6">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">APR 6</div>
+                        <div class="timeline-label">LUNAR FLYBY</div>
+                    </div>
+                    <div class="timeline-item" id="tl-7">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">APR 7</div>
+                        <div class="timeline-label">Return Transit</div>
+                    </div>
+                    <div class="timeline-item" id="tl-8">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">APR 8</div>
+                        <div class="timeline-label">Return Transit</div>
+                    </div>
+                    <div class="timeline-item" id="tl-9">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">APR 9</div>
+                        <div class="timeline-label">Final Day</div>
+                    </div>
+                    <div class="timeline-item" id="tl-10">
                         <div class="timeline-dot"></div>
                         <div class="timeline-date">APR 10</div>
-                        <div class="timeline-label">Return</div>
+                        <div class="timeline-label">Splashdown</div>
                     </div>
                 </div>
             </div>
@@ -826,24 +859,40 @@
                     <div class="stat-label">Days Duration</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">2.1M</div>
+                    <div class="stat-value">685K</div>
                     <div class="stat-label">mi Total Distance</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">7</div>
-                    <div class="stat-label">Orbits Around Moon</div>
+                    <div class="stat-value">252,757<span class="record-badge">★ RECORD</span></div>
+                    <div class="stat-label">Max Distance from Earth (mi)</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">92</div>
-                    <div class="stat-label">Hours at Moon</div>
+                    <div class="stat-value small">4,070</div>
+                    <div class="stat-label">mi from Moon (closest)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value small">3,139</div>
+                    <div class="stat-label">mph at Flyby</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value small">25,000</div>
+                    <div class="stat-label">mph Reentry Speed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value small">~3,000°F</div>
+                    <div class="stat-label">Heat Shield Temp</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value small">~17</div>
+                    <div class="stat-label">mph Splashdown Speed</div>
                 </div>
             </div>
         </section>
 
         <!-- Footer -->
         <footer class="footer">
-            <p>Artemis II Mission Tracker • Data from NASA JPL Horizons API</p>
-            <p style="margin-top: 5px;">Launch Date: April 1, 2026 • Kennedy Space Center</p>
+            <p>Artemis II Mission Tracker • Mission Data Based on NASA Flight Plan</p>
+            <p style="margin-top: 5px;">Launch: April 1, 2026 6:35 PM EDT • Kennedy Space Center → Pacific Ocean Splashdown</p>
         </footer>
     </div>
 
@@ -859,20 +908,90 @@
         // ==========================================
 
         // Mission constants
-        const MISSION_LAUNCH = new Date('2026-04-01T12:00:00Z');
-        const EARTH_RADIUS = 6371; // km
-        const MOON_RADIUS = 1737; // km
-        const EARTH_MOON_DISTANCE = 384400; // km
-        const MOON_ORBITAL_PERIOD = 27.3; // days
-        const KM_TO_MI = 0.621371; // km to miles
+        const MISSION_LAUNCH = new Date('2026-04-01T22:35:00Z'); // April 1, 2026, 6:35 PM EDT = 22:35 UTC
+        const EARTH_RADIUS_KM = 6371;
+        const MOON_RADIUS_KM = 1737;
+        const EARTH_MOON_DISTANCE_KM = 384400;
+        const MOON_ORBITAL_PERIOD_DAYS = 27.3;
+        const KM_TO_MI = 0.621371;
+        const MISSION_DURATION_DAYS = 10;
+        const MISSION_SPLASHDOWN = new Date('2026-04-11T00:00:00Z'); // April 10 approx
 
-        // Mission timeline events
+        // Accurate mission phases (Flight Days 1-10)
+        // Launch: April 1, 2026, 6:35 PM EDT
+        // Splashdown: April 10, 2026 — Pacific Ocean
         const MISSION_EVENTS = [
-            { name: 'Launch', date: new Date('2026-04-01T12:00:00Z'), description: 'Artemis II launches from Kennedy Space Center' },
-            { name: 'Trans-Lunar Injection', date: new Date('2026-04-02T00:00:00Z'), description: 'Orion performs critical engine burn to head toward Moon' },
-            { name: 'Lunar Flyby', date: new Date('2026-04-03T00:00:00Z'), description: 'Closest approach to the Moon' },
-            { name: 'Outbound Loop', date: new Date('2026-04-04T00:00:00Z'), description: 'Orion swings behind the Moon for communications test' },
-            { name: 'Return', date: new Date('2026-04-10T16:00:00Z'), description: 'Splashdown in the Pacific Ocean' }
+            {
+                day: 1,
+                name: 'High Earth Orbit',
+                date: new Date('2026-04-01T22:35:00Z'),
+                endDate: new Date('2026-04-02T12:00:00Z'),
+                description: 'SLS separation; ICPS raises to high elliptical orbit; systems checkout; potable water, toilet, CO2 scrubber tests; proximity operations demo'
+            },
+            {
+                day: 2,
+                name: 'Trans-Lunar Injection',
+                date: new Date('2026-04-02T23:49:00Z'), // ~7:49 PM EDT
+                endDate: new Date('2026-04-03T12:00:00Z'),
+                description: 'TLI burn (~5 min 50 sec, 6,000 lb thrust); Orion exits Earth orbit on free-return trajectory'
+            },
+            {
+                day: 3,
+                name: 'Outbound Transit Day 1',
+                date: new Date('2026-04-03T12:00:00Z'),
+                endDate: new Date('2026-04-04T12:00:00Z'),
+                description: '1st trajectory correction burn (Jeremy Hansen); life support system tests'
+            },
+            {
+                day: 4,
+                name: 'Outbound Transit Day 2',
+                date: new Date('2026-04-04T12:00:00Z'),
+                endDate: new Date('2026-04-05T12:00:00Z'),
+                description: '2nd trajectory correction burn; lunar geography review and camera checks'
+            },
+            {
+                day: 5,
+                name: 'Lunar Sphere of Influence',
+                date: new Date('2026-04-05T12:00:00Z'),
+                endDate: new Date('2026-04-06T12:00:00Z'),
+                description: 'Enter Moon\'s gravity sphere; full suit pressure tests; final outbound trajectory correction'
+            },
+            {
+                day: 6,
+                name: 'LUNAR FLYBY',
+                date: new Date('2026-04-06T12:00:00Z'),
+                endDate: new Date('2026-04-07T12:00:00Z'),
+                description: 'Closest approach ~4,070 miles from lunar surface; max distance from Earth ~252,757 mi (NEW RECORD); 30-50 min comms blackout; far side pass; solar eclipse visible from Orion',
+                isFlyby: true
+            },
+            {
+                day: 7,
+                name: 'Return Transit Begins',
+                date: new Date('2026-04-07T12:00:00Z'),
+                endDate: new Date('2026-04-08T12:00:00Z'),
+                description: 'Exit lunar sphere of influence; 1st return trajectory correction burn'
+            },
+            {
+                day: 8,
+                name: 'Return Transit Day 2',
+                date: new Date('2026-04-08T12:00:00Z'),
+                endDate: new Date('2026-04-09T12:00:00Z'),
+                description: 'Emergency radiation shelter demo; manual piloting demonstration'
+            },
+            {
+                day: 9,
+                name: 'Final Day in Space',
+                date: new Date('2026-04-09T12:00:00Z'),
+                endDate: new Date('2026-04-10T12:00:00Z'),
+                description: '2nd return trajectory correction burn; compression garment tests; reentry preparations'
+            },
+            {
+                day: 10,
+                name: 'Splashdown',
+                date: new Date('2026-04-10T12:00:00Z'),
+                endDate: new Date('2026-04-10T23:59:59Z'),
+                description: 'Earth reentry at ~25,000 mph; ~3,000°F heat shield; parachute deployment; Pacific Ocean splashdown at ~17 mph'
+            }
         ];
 
         // ==========================================
@@ -927,14 +1046,13 @@
                 this.canvas = canvas;
                 this.ctx = canvas.getContext('2d');
                 this.trail = [];
-                this.maxTrail = 100;
+                this.maxTrail = 150;
                 this.moonAngle = 0;
                 this.orionPos = null;
                 this.launchTime = launchTime;
                 this.resize();
                 window.addEventListener('resize', () => this.resize());
 
-                // Continuous RAF loop for smooth 60fps rendering
                 const drawLoop = () => {
                     this.draw();
                     requestAnimationFrame(drawLoop);
@@ -944,103 +1062,129 @@
 
             resize() {
                 const rect = this.canvas.parentElement.getBoundingClientRect();
-                // Guard against resize during scroll on mobile - skip if element is off-screen or has 0 width
                 if (!rect || rect.width === 0) return;
                 this.canvas.width = Math.max(100, rect.width - 40);
                 this.canvas.height = 500;
                 this.centerX = this.canvas.width / 2;
                 this.centerY = this.canvas.height / 2;
-                this.scale = Math.min(this.canvas.width, this.canvas.height) / (EARTH_MOON_DISTANCE * 2.5);
+                // Scale: fit the Earth-Moon distance within the canvas
+                // Leave room for the figure-8 trajectory extension
+                this.scale = Math.min(this.canvas.width, this.canvas.height) / (EARTH_MOON_DISTANCE_KM * 3.0);
             }
 
             update(orionPos, moonAngle) {
                 if (!orionPos || typeof orionPos.x !== 'number' || typeof orionPos.y !== 'number') {
-                    return; // Skip update if position data is invalid
+                    return;
                 }
-                // Add to trail
                 this.trail.push({ ...orionPos });
                 if (this.trail.length > this.maxTrail) {
                     this.trail.shift();
                 }
-
                 this.moonAngle = moonAngle;
                 this.orionPos = orionPos;
-                this.draw();
             }
 
             draw() {
-                if (!this.orionPos || typeof this.orionPos.x !== 'number') {
-                    return; // Wait for valid position data
-                }
-                if (!this.canvas || this.canvas.width === 0 || this.canvas.height === 0) {
-                    return; // Skip if canvas not ready
-                }
+                if (!this.orionPos || typeof this.orionPos.x !== 'number') return;
+                if (!this.canvas || this.canvas.width === 0 || this.canvas.height === 0) return;
+
                 const ctx = this.ctx;
                 ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-                // Draw orbit path (dashed circle for Moon orbit)
+                const earthRadiusPixels = 25;
+                const moonOrbitRadius = EARTH_MOON_DISTANCE_KM * this.scale;
+                const moonRadiusPixels = 8;
+
+                // Draw the Moon's orbital path (dashed circle)
                 ctx.beginPath();
-                ctx.arc(this.centerX, this.centerY, EARTH_MOON_DISTANCE * this.scale, 0, Math.PI * 2);
+                ctx.arc(this.centerX, this.centerY, moonOrbitRadius, 0, Math.PI * 2);
                 ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
                 ctx.setLineDash([5, 5]);
+                ctx.lineWidth = 1;
                 ctx.stroke();
                 ctx.setLineDash([]);
 
+                // Draw the figure-8 trajectory path (free-return trajectory)
+                // This shows the approximate path Orion takes around the Moon and back
+                ctx.save();
+                ctx.translate(this.centerX, this.centerY);
+                ctx.scale(this.scale, this.scale);
+
+                // Draw simplified figure-8 path (approximate for visualization)
+                ctx.beginPath();
+                // Start near Earth
+                ctx.moveTo(-EARTH_RADIUS_KM * 2, 0);
+                // Curve out toward Moon
+                ctx.bezierCurveTo(
+                    EARTH_MOON_DISTANCE_KM * 0.3, -EARTH_MOON_DISTANCE_KM * 0.4,
+                    EARTH_MOON_DISTANCE_KM * 0.8, -EARTH_MOON_DISTANCE_KM * 0.15,
+                    EARTH_MOON_DISTANCE_KM * 1.05, 0  // Past the Moon
+                );
+                // Curve back
+                ctx.bezierCurveTo(
+                    EARTH_MOON_DISTANCE_KM * 0.8, EARTH_MOON_DISTANCE_KM * 0.15,
+                    EARTH_MOON_DISTANCE_KM * 0.3, EARTH_MOON_DISTANCE_KM * 0.4,
+                    -EARTH_RADIUS_KM * 2, 0
+                );
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.2)';
+                ctx.setLineDash([10, 5]);
+                ctx.lineWidth = 2 / this.scale;
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.restore();
+
+                // Draw trail
                 if (this.trail.length > 1) {
+                    ctx.save();
+                    ctx.translate(this.centerX, this.centerY);
+                    ctx.scale(this.scale, this.scale);
                     ctx.beginPath();
-                    ctx.moveTo(
-                        this.centerX + this.trail[0].x * this.scale,
-                        this.centerY + this.trail[0].y * this.scale
-                    );
+                    ctx.moveTo(this.trail[0].x, this.trail[0].y);
                     for (let i = 1; i < this.trail.length; i++) {
                         const alpha = i / this.trail.length;
-                        ctx.lineTo(
-                            this.centerX + this.trail[i].x * this.scale,
-                            this.centerY + this.trail[i].y * this.scale
-                        );
+                        ctx.lineTo(this.trail[i].x, this.trail[i].y);
                     }
-                    ctx.strokeStyle = 'rgba(0, 212, 255, 0.4)';
-                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'rgba(0, 212, 255, 0.5)';
+                    ctx.lineWidth = 2 / this.scale;
                     ctx.stroke();
+                    ctx.restore();
                 }
 
                 // Draw Earth
-                const earthRadius = 25;
-                const gradient = ctx.createRadialGradient(
+                const earthGradient = ctx.createRadialGradient(
                     this.centerX - 5, this.centerY - 5, 0,
-                    this.centerX, this.centerY, earthRadius
+                    this.centerX, this.centerY, earthRadiusPixels
                 );
-                gradient.addColorStop(0, '#6db3f2');
-                gradient.addColorStop(0.5, '#4a9eff');
-                gradient.addColorStop(1, '#1a5fb4');
+                earthGradient.addColorStop(0, '#6db3f2');
+                earthGradient.addColorStop(0.5, '#4a9eff');
+                earthGradient.addColorStop(1, '#1a5fb4');
                 ctx.beginPath();
-                ctx.arc(this.centerX, this.centerY, earthRadius, 0, Math.PI * 2);
-                ctx.fillStyle = gradient;
+                ctx.arc(this.centerX, this.centerY, earthRadiusPixels, 0, Math.PI * 2);
+                ctx.fillStyle = earthGradient;
                 ctx.fill();
 
                 // Earth glow
                 ctx.shadowColor = '#4a9eff';
                 ctx.shadowBlur = 30;
                 ctx.beginPath();
-                ctx.arc(this.centerX, this.centerY, earthRadius, 0, Math.PI * 2);
+                ctx.arc(this.centerX, this.centerY, earthRadiusPixels, 0, Math.PI * 2);
                 ctx.fillStyle = 'rgba(74, 158, 255, 0.3)';
                 ctx.fill();
                 ctx.shadowBlur = 0;
 
                 // Draw Moon
-                const moonX = this.centerX + Math.cos(this.moonAngle) * EARTH_MOON_DISTANCE * this.scale;
-                const moonY = this.centerY + Math.sin(this.moonAngle) * EARTH_MOON_DISTANCE * this.scale;
-                const moonRadius = 8;
+                const moonX = this.centerX + Math.cos(this.moonAngle) * moonOrbitRadius;
+                const moonY = this.centerY + Math.sin(this.moonAngle) * moonOrbitRadius;
 
                 const moonGradient = ctx.createRadialGradient(
                     moonX - 2, moonY - 2, 0,
-                    moonX, moonY, moonRadius
+                    moonX, moonY, moonRadiusPixels
                 );
                 moonGradient.addColorStop(0, '#e8e8e8');
                 moonGradient.addColorStop(0.7, '#c0c0c0');
                 moonGradient.addColorStop(1, '#808080');
                 ctx.beginPath();
-                ctx.arc(moonX, moonY, moonRadius, 0, Math.PI * 2);
+                ctx.arc(moonX, moonY, moonRadiusPixels, 0, Math.PI * 2);
                 ctx.fillStyle = moonGradient;
                 ctx.fill();
 
@@ -1052,7 +1196,7 @@
                 ctx.shadowColor = '#00d4ff';
                 ctx.shadowBlur = 20;
                 ctx.beginPath();
-                ctx.arc(orionX, orionY, 6, 0, Math.PI * 2);
+                ctx.arc(orionX, orionY, 7, 0, Math.PI * 2);
                 ctx.fillStyle = '#00d4ff';
                 ctx.fill();
                 ctx.shadowBlur = 0;
@@ -1063,8 +1207,8 @@
                 ctx.fillStyle = '#ffffff';
                 ctx.fill();
 
-                // Draw distance lines (subtle)
-                ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
+                // Draw distance line from Earth to Orion
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.15)';
                 ctx.lineWidth = 1;
                 ctx.setLineDash([3, 3]);
                 ctx.beginPath();
@@ -1083,6 +1227,13 @@
                 this.launchTime = MISSION_LAUNCH;
             }
 
+            getMissionDay() {
+                const now = new Date();
+                const elapsed = now - this.launchTime;
+                if (elapsed < 0) return 0;
+                return Math.floor(elapsed / (1000 * 60 * 60 * 24)) + 1;
+            }
+
             getMissionElapsedTime() {
                 const now = new Date();
                 const elapsed = now - this.launchTime;
@@ -1097,15 +1248,19 @@
             getCurrentPhase() {
                 const now = new Date();
 
-                if (now < MISSION_EVENTS[0].date) {
-                    return { ...MISSION_EVENTS[0], status: 'upcoming', progress: 0 };
-                }
-
                 for (let i = MISSION_EVENTS.length - 1; i >= 0; i--) {
                     if (now >= MISSION_EVENTS[i].date) {
-                        const progress = i === MISSION_EVENTS.length - 1 ? 100 :
-                            ((now - MISSION_EVENTS[i].date) / (MISSION_EVENTS[i + 1].date - MISSION_EVENTS[i].date)) * 100;
-                        return { ...MISSION_EVENTS[i], status: 'current', progress: Math.min(progress, 100) };
+                        const event = MISSION_EVENTS[i];
+                        const nextEvent = MISSION_EVENTS[i + 1];
+                        let progress;
+                        if (nextEvent) {
+                            const duration = nextEvent.date - event.date;
+                            const elapsed = now - event.date;
+                            progress = Math.min((elapsed / duration) * 100, 100);
+                        } else {
+                            progress = 100;
+                        }
+                        return { ...event, status: 'current', progress: Math.max(0, progress) };
                     }
                 }
 
@@ -1113,191 +1268,156 @@
             }
 
             getOrionPosition() {
-                // Calculate Orion's position based on mission timeline
-                // Artemis II follows a free-return trajectory
+                // Returns { x, y, distEarth, distMoon } in km
+                // Figure-8 free-return trajectory
                 const now = new Date();
-                const elapsed = (now - this.launchTime) / (1000 * 60 * 60); // hours
-                const MAX_DIST = EARTH_MOON_DISTANCE * 1.0; // Clamp to moon orbit boundary
+                const elapsedHours = (now - this.launchTime) / (1000 * 60 * 60);
+                const elapsedDays = elapsedHours / 24;
 
-                // Helper to clamp position to within moon orbit
-                const clampPos = (x, y, distEarth) => {
-                    const dist = Math.sqrt(x * x + y * y);
-                    if (dist > MAX_DIST) {
-                        const scale = MAX_DIST / dist;
-                        return { x: x * scale, y: y * scale, distEarth };
-                    }
-                    return { x, y, distEarth };
-                };
+                if (elapsedDays < 0) {
+                    // Pre-launch: on pad
+                    return { x: -EARTH_RADIUS_KM * 2, y: 0, distEarth: EARTH_RADIUS_KM, distMoon: EARTH_MOON_DISTANCE_KM };
+                }
 
-                if (elapsed < 0) {
-                    // Pre-launch: on pad, near Earth
-                    const x = -EARTH_MOON_DISTANCE * 0.3;
-                    return clampPos(x, 0, EARTH_MOON_DISTANCE * 0.3);
-                } else if (elapsed < 24) {
-                    // Earth orbit phase (first ~24 hours)
-                    const angle = (elapsed / 1.5) * Math.PI * 2; // ~1.5 hour orbit
-                    const orbitRadius = EARTH_MOON_DISTANCE * 0.001; // Very close to Earth
+                if (elapsedDays < 1) {
+                    // Day 1: High Earth Orbit — ICPS checkout
+                    const t = elapsedDays;
+                    const angle = t * Math.PI * 2 * 2; // ~2 orbits in first day
+                    const orbitRadius = EARTH_MOON_DISTANCE_KM * 0.002; // Very close to Earth
                     return {
                         x: Math.cos(angle) * orbitRadius,
                         y: Math.sin(angle) * orbitRadius,
-                        distEarth: EARTH_RADIUS + 200 + Math.sin(elapsed * 0.5) * 50
-                    };
-                } else if (elapsed < 30) {
-                    // Trans-Lunar Injection
-                    const tliProgress = (elapsed - 24) / 6; // 6 hour TLI burn
-                    const x = EARTH_MOON_DISTANCE * 0.3 * tliProgress;
-                    const y = -EARTH_MOON_DISTANCE * 0.05 * tliProgress;
-                    const distEarth = EARTH_RADIUS + 200 + (EARTH_MOON_DISTANCE * 0.3 - EARTH_RADIUS) * tliProgress;
-                    return clampPos(x, y, distEarth);
-                } else if (elapsed < 72) {
-                    // Cruise to Moon
-                    const cruiseProgress = (elapsed - 30) / 42;
-                    const x = EARTH_MOON_DISTANCE * (0.3 + 0.65 * cruiseProgress);
-                    const y = Math.sin(cruiseProgress * Math.PI * 0.5) * EARTH_MOON_DISTANCE * 0.1;
-                    const distEarth = EARTH_MOON_DISTANCE * (0.3 + 0.65 * cruiseProgress);
-                    return clampPos(x, y, distEarth);
-                } else if (elapsed < 96) {
-                    // Lunar flyby phase: Orion passes near the Moon (~100km above surface)
-                    // Moon surface at 384400 + 1737 = 386137 km, so 386237 km at closest
-                    const flybyProgress = (elapsed - 72) / 24;
-                    const angle = flybyProgress * Math.PI * 0.8;
-                    // At flyby midpoint, position near moon's orbital distance
-                    const radius = EARTH_MOON_DISTANCE * (0.95 + flybyProgress * 0.05);
-                    return {
-                        x: Math.cos(angle) * radius,
-                        y: Math.sin(angle) * radius * 0.3,
-                        distEarth: EARTH_MOON_DISTANCE * (0.95 + flybyProgress * 0.05),
-                        distMoon: Math.abs(MOON_RADIUS + 100 - flybyProgress * 8000)
-                    };
-                } else if (elapsed < 150) {
-                    // Looping return trajectory: stays within moon orbit, spirals back
-                    const loopProgress = (elapsed - 96) / 54;
-                    const radius = EARTH_MOON_DISTANCE * (1.0 - loopProgress * 0.5);
-                    const angle = Math.PI * 0.8 + loopProgress * Math.PI * 1.2;
-                    const distEarth = EARTH_MOON_DISTANCE * (1.0 - loopProgress * 0.5);
-                    return {
-                        x: Math.cos(angle) * radius,
-                        y: Math.sin(angle) * radius * 0.2,
-                        distEarth,
-                        distMoon: distEarth * 0.3
-                    };
-                } else if (elapsed < 216) {
-                    // Return journey: inward from moon orbit back toward Earth
-                    const returnProgress = (elapsed - 150) / 66;
-                    const radius = EARTH_MOON_DISTANCE * (0.5 - returnProgress * 0.4);
-                    const angle = Math.PI * 2.0 + returnProgress * Math.PI * 1.0;
-                    const distEarth = EARTH_MOON_DISTANCE * (0.5 - returnProgress * 0.4);
-                    return clampPos(
-                        Math.cos(angle) * radius,
-                        Math.sin(angle) * radius * 0.2,
-                        distEarth
-                    );
-                } else {
-                    // Final approach to Earth
-                    const finalProgress = Math.min((elapsed - 216) / 24, 1);
-                    const radius = EARTH_MOON_DISTANCE * (0.1 - finalProgress * 0.1);
-                    return {
-                        x: Math.cos(Math.PI * 2.5) * radius,
-                        y: Math.sin(finalProgress * Math.PI) * EARTH_MOON_DISTANCE * 0.02,
-                        distEarth: EARTH_MOON_DISTANCE * (0.1 - finalProgress * 0.1),
-                        distMoon: EARTH_MOON_DISTANCE * 0.1
+                        distEarth: EARTH_RADIUS_KM + 200 + Math.sin(t * Math.PI * 4) * 30,
+                        distMoon: EARTH_MOON_DISTANCE_KM - (EARTH_RADIUS_KM + 200)
                     };
                 }
+
+                if (elapsedDays < 2) {
+                    // Day 2: Trans-Lunar Injection
+                    const t = (elapsedDays - 1);
+                    // TLI burn happens ~7:49 PM EDT on Day 2
+                    // After TLI, starts heading toward Moon
+                    const tliProgress = Math.min(t * 3, 1); // Accelerating away from Earth
+                    const baseX = EARTH_MOON_DISTANCE_KM * 0.002 + EARTH_MOON_DISTANCE_KM * 0.3 * tliProgress;
+                    return {
+                        x: baseX,
+                        y: -EARTH_MOON_DISTANCE_KM * 0.05 * tliProgress,
+                        distEarth: EARTH_RADIUS_KM + 200 + EARTH_MOON_DISTANCE_KM * 0.3 * tliProgress,
+                        distMoon: EARTH_MOON_DISTANCE_KM - (EARTH_RADIUS_KM + 200 + EARTH_MOON_DISTANCE_KM * 0.3 * tliProgress)
+                    };
+                }
+
+                if (elapsedDays < 5) {
+                    // Days 3-4: Outbound transit
+                    const t = (elapsedDays - 2) / 3;
+                    const x = EARTH_MOON_DISTANCE_KM * (0.3 + 0.55 * t);
+                    const y = Math.sin(t * Math.PI) * EARTH_MOON_DISTANCE_KM * 0.12;
+                    return {
+                        x, y,
+                        distEarth: EARTH_RADIUS_KM + 200 + EARTH_MOON_DISTANCE_KM * (0.3 + 0.55 * t),
+                        distMoon: EARTH_MOON_DISTANCE_KM * (0.7 - 0.55 * t)
+                    };
+                }
+
+                if (elapsedDays < 6) {
+                    // Day 5-6: Lunar Sphere of Influence → Lunar Flyby
+                    const t = (elapsedDays - 5);
+                    // On Day 6, we're at max distance from Earth (~252,757 mi = ~406,773 km)
+                    // This is the lunar flyby — Orion swings past the Moon and starts returning
+                    // Position: near the Moon (which is at Earth_Moon_Distance from Earth)
+                    // The "far side" means past the Moon relative to Earth
+                    const moonDist = EARTH_MOON_DISTANCE_KM;
+                    // At closest approach, Orion is ~6,550 km from Moon's center, i.e. ~4,070 mi from surface
+                    // On the return side of figure-8, slightly past the Moon
+                    const angle = this.moonAngle + 0.15; // Slightly ahead in orbit (return direction)
+                    return {
+                        x: Math.cos(angle) * moonDist + 5000, // Just past Moon toward return
+                        y: Math.sin(angle) * moonDist * 0.15,
+                        distEarth: 406773, // ~252,757 miles in km — MAX DISTANCE RECORD
+                        distMoon: 6550 // ~4,070 miles from lunar surface
+                    };
+                }
+
+                if (elapsedDays < 7) {
+                    // Day 7: Return transit begins — exiting lunar SOI
+                    const t = (elapsedDays - 6);
+                    const moonDist = EARTH_MOON_DISTANCE_KM * (1.0 - t * 0.15);
+                    const angle = this.moonAngle + 0.4;
+                    return {
+                        x: Math.cos(angle) * moonDist,
+                        y: Math.sin(angle) * moonDist * 0.2,
+                        distEarth: EARTH_MOON_DISTANCE_KM * (0.95 - t * 0.2),
+                        distMoon: EARTH_MOON_DISTANCE_KM * 0.25
+                    };
+                }
+
+                if (elapsedDays < 9) {
+                    // Days 8-9: Return transit
+                    const t = (elapsedDays - 7) / 2;
+                    const moonDist = EARTH_MOON_DISTANCE_KM * (0.8 - t * 0.5);
+                    const angle = this.moonAngle + 0.8 + t * 0.5;
+                    return {
+                        x: Math.cos(angle) * moonDist,
+                        y: Math.sin(angle) * moonDist * 0.15,
+                        distEarth: EARTH_MOON_DISTANCE_KM * (0.75 - t * 0.55),
+                        distMoon: EARTH_MOON_DISTANCE_KM * (0.3 + t * 0.3)
+                    };
+                }
+
+                // Days 9-10: Final approach
+                const t = Math.min((elapsedDays - 9), 1);
+                const moonDist = EARTH_MOON_DISTANCE_KM * (0.25 - t * 0.25);
+                const angle = this.moonAngle + 1.5;
+                return {
+                    x: Math.cos(angle) * moonDist,
+                    y: Math.sin(angle) * moonDist * 0.1,
+                    distEarth: EARTH_MOON_DISTANCE_KM * (0.2 - t * 0.2),
+                    distMoon: EARTH_MOON_DISTANCE_KM * 0.6
+                };
             }
 
             getVelocity() {
-                const elapsed = (new Date() - this.launchTime) / (1000 * 60 * 60);
-                if (elapsed < 0) return 0;
-                if (elapsed < 24) return 7.8 + Math.sin(elapsed * 0.3) * 0.2; // Earth orbit
-                if (elapsed < 30) return 7.8 + (elapsed - 24) * 0.15; // TLI
-                if (elapsed < 150) return 1.1 + Math.sin(elapsed * 0.05) * 0.1; // Lunar cruise
-                return 11.2 - (elapsed - 150) * 0.02; // Return (approaching Earth)
+                // Speed in mi/s at various mission phases
+                const day = this.getMissionDay();
+                if (day <= 1) return 4.85; // Earth orbital velocity ~7.8 km/s
+                if (day === 2) return 5.2 + (day - 2) * 0.3; // Building to TLI
+                if (day <= 6) return 0.87; // ~1.4 km/s = ~0.87 mi/s cruising
+                if (day <= 9) return 1.0 + (day - 6) * 0.2; // Accelerating on return
+                return 8.7; // Reentry ~14 km/s = ~8.7 mi/s
             }
 
-            getTimeToReturn() {
+            getTimeToSplashdown() {
                 const now = new Date();
-                const returnDate = new Date('2026-04-10T16:00:00Z');
-                const remaining = returnDate - now;
+                const splashdown = new Date('2026-04-10T20:00:00Z'); // Approximate splashdown time
+                const remaining = splashdown - now;
                 if (remaining <= 0) return { hours: 0, minutes: 0, text: 'Landed' };
                 const hours = Math.floor(remaining / (1000 * 60 * 60));
                 const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-                return { hours, minutes, text: `${hours}h ${minutes}m` };
+                return { hours, minutes, text: `${hours}d ${minutes}h` };
             }
 
             getMoonAngle() {
                 const now = new Date();
-                const elapsed = (now - (this.launchTime || new Date('2026-04-01T12:00:00Z'))) / (1000 * 60 * 60 * 24);
-                return (elapsed / MOON_ORBITAL_PERIOD) * Math.PI * 2 || 0;
+                const elapsedDays = (now - this.launchTime) / (1000 * 60 * 60 * 24);
+                return (elapsedDays / MOON_ORBITAL_PERIOD_DAYS) * Math.PI * 2;
             }
 
             getAltitude() {
                 const pos = this.getOrionPosition();
-                return Math.max(0, pos.distEarth - EARTH_RADIUS);
+                return Math.max(0, pos.distEarth - EARTH_RADIUS_KM);
             }
 
             getInclination() {
-                // Simulated orbital inclination (varies throughout mission)
-                const elapsed = (new Date() - this.launchTime) / (1000 * 60 * 60);
-                return 28.5 + Math.sin(elapsed * 0.1) * 5;
-            }
-        }
-
-        // ==========================================
-        // JPL HORIZONS API
-        // ==========================================
-        class HorizonsAPI {
-            constructor() {
-                this.baseUrl = 'https://ssd.jpl.nasa.gov/api/horizons.api';
-                this.connected = false;
+                // Free-return trajectory inclination varies
+                const day = this.getMissionDay();
+                // Approximate: outbound is ~28°, return is ~28° mirrored
+                return 28.5;
             }
 
-            async fetchOrionData() {
-                // JPL Horizons doesn't track Orion spacecraft publicly.
-                // Use the mission timeline-based calculation for position data.
-                // This is the same approach NASA uses for public mission tracking.
-                return null;
-            }
-
-            getTimeString(hoursOffset) {
-                const date = new Date();
-                date.setHours(date.getHours() + hoursOffset);
-                return date.toISOString().replace(/\.\d{3}/, '').replace(/[-:]/g, '').replace('T', ' ');
-            }
-
-            parseHorizonsResponse(text) {
-                // Parse JPL Horizons vector output
-                const lines = text.split('\n');
-                let dataStarted = false;
-                const vectors = [];
-
-                for (const line of lines) {
-                    if (line.includes('$$SOE')) {
-                        dataStarted = true;
-                        continue;
-                    }
-                    if (line.includes('$$EOE')) {
-                        break;
-                    }
-                    if (dataStarted && line.trim()) {
-                        // Parse vector data lines
-                        const parts = line.trim().split(/\s+/);
-                        if (parts.length >= 6) {
-                            vectors.push({
-                                x: parseFloat(parts[0]),
-                                y: parseFloat(parts[1]),
-                                z: parseFloat(parts[2]),
-                                vx: parseFloat(parts[3]),
-                                vy: parseFloat(parts[4]),
-                                vz: parseFloat(parts[5])
-                            });
-                        }
-                    }
-                }
-
-                if (vectors.length > 0) {
-                    return vectors[vectors.length - 1]; // Return most recent
-                }
-                return null;
+            getTimelineProgress() {
+                const totalMissionMs = 9 * 24 * 60 * 60 * 1000; // ~9 days
+                const elapsed = this.getMissionElapsedTime().total;
+                return Math.min((elapsed / totalMissionMs) * 100, 100);
             }
         }
 
@@ -1309,8 +1429,7 @@
                 this.launchTime = MISSION_LAUNCH;
                 this.orbitViz = new OrbitVisualization(document.getElementById('orbit-canvas'), this.launchTime);
                 this.calculator = new MissionCalculator();
-                this.horizons = new HorizonsAPI();
-                this.updateInterval = 60000; // 60 seconds
+                this.updateInterval = 30000; // 30 seconds
                 this.init();
             }
 
@@ -1319,13 +1438,11 @@
                 this.update();
                 setInterval(() => this.update(), this.updateInterval);
 
-                // Force canvas redraw when scrolled back into view on iOS Safari
                 const canvasContainer = document.querySelector('.canvas-container');
                 if (canvasContainer && 'IntersectionObserver' in window) {
                     const observer = new IntersectionObserver((entries) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting && this.orbitViz) {
-                                // Canvas came back into view - force a redraw
                                 this.orbitViz.draw();
                             }
                         });
@@ -1334,52 +1451,19 @@
                 }
             }
 
-            async update() {
+            update() {
                 try {
-                    // Try JPL Horizons first
-                    const horizonsData = await this.horizons.fetchOrionData();
+                    const orionPos = this.calculator.getOrionPosition();
+                    const velocity = this.calculator.getVelocity();
+                    const distEarth = orionPos.distEarth;
+                    const distMoon = orionPos.distMoon;
 
-                    let orionPos, velocity, distEarth, distMoon;
-
-                    if (horizonsData) {
-                        // Use JPL Horizons data (convert AU to km, assuming data is in AU)
-                        const AU_TO_KM = 149597870.7;
-                        orionPos = {
-                            x: horizonsData.x * AU_TO_KM / 1000, // Convert to km
-                            y: horizonsData.y * AU_TO_KM / 1000
-                        };
-                        velocity = Math.sqrt(
-                            horizonsData.vx ** 2 +
-                            horizonsData.vy ** 2 +
-                            horizonsData.vz ** 2
-                        ) * AU_TO_KM / 1000; // km/s
-
-                        // Calculate distances
-                        distEarth = Math.sqrt(
-                            (orionPos.x) ** 2 +
-                            (orionPos.y) ** 2
-                        );
-                        distMoon = Math.abs(distEarth - EARTH_MOON_DISTANCE);
-
-                        this.updateAPIStatus(true, 'JPL Horizons Connected');
-                    } else {
-                        // Use calculated mission data
-                        orionPos = this.calculator.getOrionPosition();
-                        velocity = this.calculator.getVelocity();
-                        distEarth = orionPos.distEarth || this.calculator.getMissionElapsedTime().total > 0 ?
-                            EARTH_MOON_DISTANCE * 0.5 : EARTH_RADIUS + 200;
-                        distMoon = orionPos.distMoon || EARTH_MOON_DISTANCE - distEarth;
-
-                        this.updateAPIStatus(true, 'Using Mission Data');
-                    }
-
-                    // Update UI
                     this.updateTelemetry(distEarth, distMoon, velocity);
                     this.updatePhase();
                     this.updateTimeline();
                     this.updateOrbitVisualization(orionPos);
+                    this.updateAPIStatus(true, 'Mission Data');
 
-                    // Update timestamp
                     document.getElementById('last-update').textContent =
                         new Date().toLocaleTimeString('en-US', { hour12: false });
 
@@ -1390,24 +1474,25 @@
             }
 
             updateTelemetry(distEarth, distMoon, velocity) {
-                document.getElementById('dist-earth').textContent =
-                    this.formatNumber(distEarth);
-                document.getElementById('dist-moon').textContent =
-                    this.formatNumber(distMoon);
-                document.getElementById('velocity').textContent =
-                    velocity.toFixed(2);
-                document.getElementById('altitude').textContent =
-                    this.formatNumber(this.calculator.getAltitude());
-                document.getElementById('inclination').textContent =
-                    this.calculator.getInclination().toFixed(1);
+                // Convert km to miles for display
+                const distEarthMi = distEarth * KM_TO_MI;
+                const distMoonMi = distMoon * KM_TO_MI;
+                const velocityMiS = velocity * KM_TO_MI;
+                const altitudeMi = this.calculator.getAltitude() * KM_TO_MI;
+
+                document.getElementById('dist-earth').textContent = this.formatNumber(distEarthMi);
+                document.getElementById('dist-moon').textContent = this.formatNumber(distMoonMi);
+                document.getElementById('velocity').textContent = velocityMiS.toFixed(2);
+                document.getElementById('altitude').textContent = this.formatNumber(altitudeMi);
+                document.getElementById('inclination').textContent = this.calculator.getInclination().toFixed(1);
 
                 const time = this.calculator.getMissionElapsedTime();
                 if (time.total > 0) {
                     document.getElementById('mission-time').textContent =
                         `${time.days}d ${time.hours}h ${time.minutes}m`;
                 }
-                const timeToReturn = this.calculator.getTimeToReturn();
-                document.getElementById('time-to-return').textContent = timeToReturn.text;
+                const timeToSplashdown = this.calculator.getTimeToSplashdown();
+                document.getElementById('time-to-return').textContent = timeToSplashdown.text;
             }
 
             updatePhase() {
@@ -1418,32 +1503,26 @@
             }
 
             updateTimeline() {
-                const elapsed = this.calculator.getMissionElapsedTime().total;
-                const totalMission = 9 * 24 * 60 * 60 * 1000; // ~9 days
-                const progress = Math.min((elapsed / totalMission) * 100, 100);
-
+                const progress = this.calculator.getTimelineProgress();
                 document.getElementById('timeline-progress').style.width = `${progress}%`;
 
-                // Update timeline items
+                const currentDay = this.calculator.getMissionDay();
                 const now = new Date();
-                const items = ['tl-launch', 'tl-tli', 'tl-flyby', 'tl-outbound', 'tl-return'];
-                items.forEach((id, index) => {
-                    const el = document.getElementById(id);
+
+                for (let d = 1; d <= 10; d++) {
+                    const el = document.getElementById(`tl-${d}`);
+                    if (!el) continue;
                     el.classList.remove('completed', 'current', 'upcoming');
 
-                    if (index < MISSION_EVENTS.length) {
-                        if (now >= MISSION_EVENTS[index].date) {
-                            if (index === MISSION_EVENTS.length - 1 ||
-                                now < MISSION_EVENTS[index + 1].date) {
-                                el.classList.add('current');
-                            } else {
-                                el.classList.add('completed');
-                            }
-                        } else {
-                            el.classList.add('upcoming');
-                        }
+                    const event = MISSION_EVENTS[d - 1];
+                    if (d < currentDay) {
+                        el.classList.add('completed');
+                    } else if (d === currentDay) {
+                        el.classList.add('current');
+                    } else {
+                        el.classList.add('upcoming');
                     }
-                });
+                }
             }
 
             updateOrbitVisualization(orionPos) {
@@ -1460,8 +1539,9 @@
             }
 
             formatNumber(num) {
-                // Convert km to miles for display
-                num = num * KM_TO_MI;
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(1) + 'M';
+                }
                 if (num >= 1000) {
                     return (num / 1000).toFixed(0) + 'K';
                 }
