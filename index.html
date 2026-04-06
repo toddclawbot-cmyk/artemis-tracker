@@ -1247,6 +1247,17 @@
 
             getCurrentPhase() {
                 const now = new Date();
+                const splashdownDate = new Date('2026-04-10T20:00:00Z');
+
+                // Post-mission: show Mission Complete
+                if (now > splashdownDate) {
+                    return {
+                        name: 'Mission Complete',
+                        description: 'Artemis II has splashed down in the Pacific Ocean. Welcome home, crew!',
+                        status: 'complete',
+                        progress: 100
+                    };
+                }
 
                 for (let i = MISSION_EVENTS.length - 1; i >= 0; i--) {
                     if (now >= MISSION_EVENTS[i].date) {
@@ -1376,7 +1387,22 @@
                 };
             }
 
+            // Post-splashdown: Orion is back on Earth, in the Pacific
+            const splashdownDate = new Date('2026-04-10T20:00:00Z');
+            if (now > splashdownDate) {
+                return {
+                    x: 0,
+                    y: 0,
+                    distEarth: EARTH_RADIUS_KM, // Back on Earth
+                    distMoon: EARTH_MOON_DISTANCE_KM
+                };
+            }
+
             getVelocity() {
+                const now = new Date();
+                const splashdownDate = new Date('2026-04-10T20:00:00Z');
+                if (now > splashdownDate) return 0; // Splashdown complete
+
                 // Speed in mi/s at various mission phases
                 const day = this.getMissionDay();
                 if (day <= 1) return 4.85; // Earth orbital velocity ~7.8 km/s
@@ -1493,6 +1519,14 @@
                 }
                 const timeToSplashdown = this.calculator.getTimeToSplashdown();
                 document.getElementById('time-to-return').textContent = timeToSplashdown.text;
+
+                // Update LIVE badge to MISSION COMPLETE post-splashdown
+                const now = new Date();
+                const splashdownDate = new Date('2026-04-10T20:00:00Z');
+                const liveBadge = document.querySelector('.live-indicator');
+                if (liveBadge && now > splashdownDate) {
+                    liveBadge.innerHTML = '<span class="live-dot" style="background:#ffd700;"></span>MISSION COMPLETE';
+                }
             }
 
             updatePhase() {
@@ -1508,19 +1542,25 @@
 
                 const currentDay = this.calculator.getMissionDay();
                 const now = new Date();
+                const splashdownDate = new Date('2026-04-10T20:00:00Z');
+                const isComplete = now > splashdownDate;
 
                 for (let d = 1; d <= 10; d++) {
                     const el = document.getElementById(`tl-${d}`);
                     if (!el) continue;
                     el.classList.remove('completed', 'current', 'upcoming');
 
-                    const event = MISSION_EVENTS[d - 1];
-                    if (d < currentDay) {
+                    if (isComplete) {
                         el.classList.add('completed');
-                    } else if (d === currentDay) {
-                        el.classList.add('current');
                     } else {
-                        el.classList.add('upcoming');
+                        const event = MISSION_EVENTS[d - 1];
+                        if (d < currentDay) {
+                            el.classList.add('completed');
+                        } else if (d === currentDay) {
+                            el.classList.add('current');
+                        } else {
+                            el.classList.add('upcoming');
+                        }
                     }
                 }
             }
