@@ -1285,6 +1285,17 @@
                 const elapsedHours = (now - this.launchTime) / (1000 * 60 * 60);
                 const elapsedDays = elapsedHours / 24;
 
+                // Post-splashdown: Orion is back on Earth, in the Pacific
+                const splashdownDate = new Date('2026-04-10T20:00:00Z');
+                if (now > splashdownDate) {
+                    return {
+                        x: 0,
+                        y: 0,
+                        distEarth: EARTH_RADIUS_KM,
+                        distMoon: EARTH_MOON_DISTANCE_KM
+                    };
+                }
+
                 if (elapsedDays < 0) {
                     // Pre-launch: on pad
                     return { x: -EARTH_RADIUS_KM * 2, y: 0, distEarth: EARTH_RADIUS_KM, distMoon: EARTH_MOON_DISTANCE_KM };
@@ -1384,17 +1395,6 @@
                     y: Math.sin(angle) * moonDist * 0.1,
                     distEarth: EARTH_MOON_DISTANCE_KM * (0.2 - t * 0.2),
                     distMoon: EARTH_MOON_DISTANCE_KM * 0.6
-                };
-            }
-
-            // Post-splashdown: Orion is back on Earth, in the Pacific
-            const splashdownDate = new Date('2026-04-10T20:00:00Z');
-            if (now > splashdownDate) {
-                return {
-                    x: 0,
-                    y: 0,
-                    distEarth: EARTH_RADIUS_KM, // Back on Earth
-                    distMoon: EARTH_MOON_DISTANCE_KM
                 };
             }
 
